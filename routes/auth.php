@@ -37,8 +37,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
 Route::get('/auth/{provider}/callback', function ($provider) {
-    dd($provider);
-    $user = Socialite::driver($provider)->stateless()->user();
 
-    dd($user);
+    $user = Socialite::driver($provider)->stateless()->user();
+    \Illuminate\Support\Facades\Log::info('user', [$user]);
 })->where('provider', '.*');

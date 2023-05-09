@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,10 +22,3 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 //Route::get('/auth/redirect', function () {
 //    return Socialite::driver('github')->redirect();
 //});
-
-Route::get('/auth/{provider}/callback', function ($provider) {
-
-    $user = Socialite::driver($provider)->stateless()->user();
-
-    dd($user);
-})->where('provider', '.*');

@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use Laravel\Socialite\Facades\Socialite;
 
 class RegisteredUserController extends Controller
 {
@@ -18,13 +20,24 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response
+    public function store(Request $request, string $provider = 'local')
     {
-        $request->validate([
+        $user = null;
+        if ($provider !== 'local') {
+            $user = Socialite::driver($provider)->user();
+            $request->merge([
+                'name' => $user->getName(),
+                'email' => $user->getEmail(),
+                'password' => Str::password()
+            ]);
+        }
+
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        ];
+        $request->validate($rules);
 
         $user = User::create([
             'name' => $request->name,

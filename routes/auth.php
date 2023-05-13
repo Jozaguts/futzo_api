@@ -36,8 +36,11 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
-Route::get('/auth/{provider}/callback', function ($provider) {
+Route::get('/auth/{provider}/redirect',  function ($provider) {
+    return Socialite::driver($provider)->redirect();
+});
 
-    $user = Socialite::driver($provider)->stateless()->user();
-    \Illuminate\Support\Facades\Log::info('user', [$user]);
-})->where('provider', '.*');
+Route::get('/auth/{provider}/callback',  [RegisteredUserController::class, 'store']);
+
+
+

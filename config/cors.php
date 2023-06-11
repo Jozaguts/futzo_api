@@ -20,7 +20,8 @@ return [
         'sanctum/*',
         'login',
         'logout',
-        'auth/facebook/callback'
+        'auth/facebook/callback',
+        'auth/facebook/redirect',
     ],
 
     'allowed_methods' => ['*'],

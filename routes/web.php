@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+use App\Scopes\TenantScope;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,8 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return [
         'users' => App\Models\User::count(),
+        'env' => env('FRONTEND_URL'),
 //        'users_by_tenant' => App\Models\User::where('tenant_id', 1)->count(),
     ];
 });
 
- require __DIR__.'/auth.php';
+
